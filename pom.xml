@@ -34,5 +34,6 @@
     </dependencies>
     <modules>
         <module>testJettyProject</module>
+        <module>springdatajpaProject</module>
     </modules>
 </project>
