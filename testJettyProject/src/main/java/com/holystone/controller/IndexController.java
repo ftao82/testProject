@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -93,23 +94,23 @@ public class IndexController {
             EntityManagerFactory factory = Persistence.createEntityManagerFactory("eclipselink");
             EntityManager em = factory.createEntityManager();
             em.getTransaction().begin();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 3; i++) {
                 Customer customer = new Customer();
                 customer.setName("customer" + i);
                 customer.setEmail("customer" + i + "@my.com");
                 customer.setBirthday(Calendar.getInstance().getTime());
+                em.persist(customer);
 
                 Address addressHome = new Address();
                 addressHome.setName("Home");
+                addressHome.setCustomer(customer);
                 em.persist(addressHome);
 
                 Address addressOffice = new Address();
                 addressOffice.setName("Office");
+                addressOffice.setCustomer(customer);
                 em.persist(addressOffice);
 
-                customer.addAddress(addressHome);
-                customer.addAddress(addressOffice);
-                em.persist(customer);
             }
             em.getTransaction().commit();
             em.close();

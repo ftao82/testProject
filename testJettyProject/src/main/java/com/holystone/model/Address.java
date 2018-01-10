@@ -64,7 +64,7 @@ public class Address {
     private int id;
 
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     private Customer customer;
 
     public int getId() {
