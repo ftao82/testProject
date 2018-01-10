@@ -14,6 +14,9 @@ import javax.persistence.*;
 @Entity
 public class Address {
     /**
+     * jpa
+     * demo :http://blog.csdn.net/bigtree_3721/article/details/42343639#t0
+     * 各种关系 关联
      * jpa 表 生成器 generationtype.table
      *              将当前主键的值单独保存到一个数据库的表中，
      *              主键的值每次都是从指定的表中查询来获得，
