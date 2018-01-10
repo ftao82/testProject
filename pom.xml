@@ -33,6 +33,6 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>jettyProjectTest</module>
+        <module>testJettyProject</module>
     </modules>
 </project>
