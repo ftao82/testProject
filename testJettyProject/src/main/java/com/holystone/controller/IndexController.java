@@ -10,16 +10,24 @@ package com.holystone.controller;
  * @Time:下午6:06
  */
 
+import com.holystone.model.Address;
+import com.holystone.model.Customer;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.naming.InitialContext;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * @Controller注解：采用注解的方式，可以明确地定义该类为处理请求的Controller类；
@@ -74,6 +82,59 @@ public class IndexController {
         logger.debug("datasource end");
     }
 
+    /**
+     *
+     * @param response
+     */
+    @RequestMapping(value = "/createDb", method = RequestMethod.GET)
+    public void createDb(HttpServletResponse response) {
+        logger.debug("createDb start");
+        try{
+            EntityManagerFactory factory = Persistence.createEntityManagerFactory("eclipselink");
+            EntityManager em = factory.createEntityManager();
+            em.getTransaction().begin();
+            for (int i = 0; i < 10; i++) {
+                Customer customer = new Customer();
+                customer.setName("customer" + i);
+                customer.setEmail("customer" + i + "@my.com");
+                customer.setBirthday(Calendar.getInstance().getTime());
+
+                Address addressHome = new Address();
+                addressHome.setName("Home");
+                em.persist(addressHome);
+
+                Address addressOffice = new Address();
+                addressOffice.setName("Office");
+                em.persist(addressOffice);
+
+                customer.addAddress(addressHome);
+                customer.addAddress(addressOffice);
+                em.persist(customer);
+            }
+            em.getTransaction().commit();
+            em.close();
+
+
+//            em = factory.createEntityManager();
+//            String sql = "select c from Customer c";
+//            TypedQuery<Customer> q = em.createQuery(sql, Customer.class);
+//            List<Customer> customers = q.getResultList();
+//            for(Customer c: customers) {
+//                System.out.println(c);
+//            }
+//            em.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        logger.debug("createDb end");
+    }
+
+    /**
+     *
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private String returnResultSet(ResultSet resultSet) throws SQLException {
                ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
                 int num = resultSetMetaData.getColumnCount();
